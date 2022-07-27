@@ -3,6 +3,10 @@ from boto3 import Session
 from botocore.exceptions import BotoCoreError, ClientError, ProfileNotFound
 import sys
 import random
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 voices = [
     "Brian",
@@ -30,7 +34,10 @@ class AWSPolly:
 
     def run(self, text, filepath, voice="Matthew"):
         try:
-            session = Session()
+            AWSAccessKeyId=os.environ["AWSAccessKeyId"]
+            AWSSecretKey=os.environ["AWSSecretKey"]
+
+            session = Session(aws_access_key_id=AWSAccessKeyId,aws_secret_access_key=AWSSecretKey,region_name="us-east-1")
             polly = session.client("polly")
             voice=voice.capitalize()
 
@@ -39,6 +46,7 @@ class AWSPolly:
                 response = polly.synthesize_speech(
                     Text=text, OutputFormat="mp3", VoiceId=voice, Engine="neural"
                 )
+
             except (BotoCoreError, ClientError) as error:
                 # The service returned an error, exit gracefully
                 print(error)
