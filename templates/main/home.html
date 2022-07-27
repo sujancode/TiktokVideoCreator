@@ -1,0 +1,10 @@
+{% include 'partials/header.html'%}
+<div>
+    <form method="post" action="">
+        {%csrf_token%}
+        <input name="post_id" placeholder="Insert Post ID"/>
+        <button type="submit">Create Video</button>
+    </form>
+
+</div>
+{% include 'partials/footer.html'%}
