@@ -16,3 +16,6 @@ yarn-error.log
 .phpunit.result.cache
 /wave/vendor/
 /public/wave/docs
+/assets
+/results
+/result
