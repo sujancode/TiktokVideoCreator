@@ -1,0 +1,2 @@
+docker build --tag tiktok_video .
+docker run --publish 8080:8080 tiktok_video

@@ -36,7 +36,8 @@ class AWSPolly:
         try:
             AWSAccessKeyId=os.environ["AWSAccessKeyId"]
             AWSSecretKey=os.environ["AWSSecretKey"]
-
+            print(AWSAccessKeyId)
+            print(AWSSecretKey)
             session = Session(aws_access_key_id=AWSAccessKeyId,aws_secret_access_key=AWSSecretKey,region_name="us-east-1")
             polly = session.client("polly")
             voice=voice.capitalize()
