@@ -44,7 +44,7 @@ def get_comments_from_post_id(req):
     length=math.ceil(length)
 
     download_screenshots_of_reddit_posts(comments, number_of_comments,theme="light",username=username,lang="en")
-    bg_config = get_background_config(background_choice="minecraft")
+    bg_config = get_background_config(background_choice="motor-gta")
     download_background(bg_config)
     chop_background_video(bg_config, length,username)
     save_path=make_final_video(number_of_comments, length, comments, bg_config,username)
@@ -72,5 +72,4 @@ def send_file_response(request, file_location):
     except IOError:
         # handle file not exist case here
         response = HttpResponseNotFound('<h1>File not exist</h1>')
-    os.system(f"rm -fr {file_location}")
     return response
