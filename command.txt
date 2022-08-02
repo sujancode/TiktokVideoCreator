@@ -1,2 +1,2 @@
 docker build --tag tiktok_video .
-docker run --memory="2g" --cpus="2" --publish 8080:8080 tiktok_video
+docker run --memory="2g" --cpus="2" --publish 8080:8080 tiktok_video --env-file .env
