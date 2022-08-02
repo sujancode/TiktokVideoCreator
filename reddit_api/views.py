@@ -35,7 +35,9 @@ def get_post_from_id(req):
     post=reddit_client.get_post_by_id(post_id=post_id)
     return JsonResponse(post)
 
-def generate_file(username,post_id):
+def get_comments_from_post_id(req):
+    username="sujan"
+    post_id = req.GET["post_id"]
     reddit_client= getRedditClientInstance()
     comments=reddit_client.get_top_comments_by_post(post_id=post_id,max_comment_length=500)
     length, number_of_comments = save_text_to_mp3(comments,username=username)
@@ -47,19 +49,14 @@ def generate_file(username,post_id):
     chop_background_video(bg_config, length,username)
     save_path=make_final_video(number_of_comments, length, comments, bg_config,username)
 
-def get_comments_from_post_id(req):
-    username="sujan"
-    post_id = req.GET["post_id"]
-
-    threading.Thread(target=generate_file,args=(username,post_id,)).start()
     #was for s3 but don't want to use it right now
     # asset_path=os.path.join(os.getcwd(),"assets",username)
 
     # s3StorageClient=getS3StorageInstance()
     # task=threading.Thread(target=s3StorageClient.upload_file,args=(f"{asset_path}/temp/mp3/*.mp3","tiktok-video-maker",f"{username}/temp/mp3",))
     # task.start()    
-    
-    return HttpResponse("GENERATING FILE.We will notify you once completed") 
+    print(save_path)
+    return send_file_response(req,save_path)
 
 
 def send_file_response(request, file_location):
