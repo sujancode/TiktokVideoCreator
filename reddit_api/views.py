@@ -13,6 +13,8 @@ from core_system.storage_bucket.index import getS3StorageInstance
 from core_system.video_creation.screenshot_downloader import download_screenshots_of_reddit_posts
 from core_system.video_creation.background import get_background_config,download_background,chop_background_video
 from core_system.video_creation.final_video import make_final_video
+from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 def get_list_of_sub_reddits(req):
     return JsonResponse({
@@ -35,9 +37,15 @@ def get_post_from_id(req):
     post=reddit_client.get_post_by_id(post_id=post_id)
     return JsonResponse(post)
 
+@csrf_exempt
 def get_comments_from_post_id(req):
-    username="sujan"
-    post_id = req.GET["post_id"]
+    username=req.POST["username"]
+    post_id = req.POST["post_id"]
+    if not username or not post_id:
+        return JsonResponse({
+            "message":"Please username or post_id invalid",
+            "status":"500"
+        })
     reddit_client= getRedditClientInstance()
     comments=reddit_client.get_top_comments_by_post(post_id=post_id,max_comment_length=500)
     length, number_of_comments = save_text_to_mp3(comments,username=username)
