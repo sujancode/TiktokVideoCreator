@@ -39,6 +39,7 @@ def get_post_from_id(req):
 
 @csrf_exempt
 def get_comments_from_post_id(req):
+    print(req.POST)
     username=req.POST["username"]
     post_id = req.POST["post_id"]
     if not username or not post_id:
@@ -60,11 +61,14 @@ def get_comments_from_post_id(req):
     #was for s3 but don't want to use it right now
     # asset_path=os.path.join(os.getcwd(),"assets",username)
 
-    # s3StorageClient=getS3StorageInstance()
-    # task=threading.Thread(target=s3StorageClient.upload_file,args=(f"{asset_path}/temp/mp3/*.mp3","tiktok-video-maker",f"{username}/temp/mp3",))
+    s3StorageClient=getS3StorageInstance()
+    s3StorageClient.upload_file(save_path,"redditvideobucket",f"results/{username}")
     # task.start()    
     print(save_path)
-    return send_file_response(req,save_path)
+    os.system(f"rm -fr {save_path}")
+    return JsonResponse({
+        "path":save_path
+    })
 
 
 def send_file_response(request, file_location):
@@ -74,7 +78,7 @@ def send_file_response(request, file_location):
            file_data = f.read()
 
         # sending response 
-        response = HttpResponse(file_data, content_type='application/vnd.ms-excel')
+        response = HttpResponse(file_data, content_type='application/mp4')
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     except IOError:
